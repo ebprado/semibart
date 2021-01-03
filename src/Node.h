@@ -90,5 +90,6 @@ public:
    int varIndex;
 };
 
-
+void getVarUsage(Node* node, int depth, int nodeIndex, std::vector<VarUsage>& vu);
+void printVarUsageVector(const std::vector<VarUsage>& vs);
 

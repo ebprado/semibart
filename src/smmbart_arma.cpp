@@ -57,8 +57,7 @@ vec ydat1;
 
 vec logitweights; //weights for logistic regression
 
-double nu = 8; //for approximation to logistic regression 
-
+double nu = 8; //for approximation to logistic regression
 
 vec weights;
 
@@ -208,6 +207,7 @@ List semibartcpp(arma::mat iX, arma::mat itrt, arma::vec iy,
     {theTrees[i] = new Node; theTrees[i]->SetData();} //change double to Node
   
   mat mtrainFits(ntree,NumObs); mtrainFits.zeros();
+  mat savetest(ntree*ndpost,NumObs); mtrainFits.zeros();
   //Check what these are for
   int Done = 0;
   double alpha = 0.0;
@@ -222,10 +222,14 @@ List semibartcpp(arma::mat iX, arma::mat itrt, arma::vec iy,
   vec mfits(NumObs); mfits.zeros();
 
   vec eps(NumObs); eps.zeros();//residuals for backfitting
+  // vec varcnt(NumX); varcnt.zeros();
+  // std::vector<int> varcnt; //store var counts, each draw
 
   // Storage for MCMC parameters of interest
   // stores beta MCMC parameters
   mat betaReps(ndpost,NumA); betaReps.zeros();
+  mat trdraw(ndpost, NumObs); trdraw.zeros();
+  // mat savevarcnt(ndpost, NumX); savevarcnt.zeros();
   // stores sigma MCMC valyes
   vec sigmaReps(ndpost); sigmaReps.zeros();
   
@@ -233,8 +237,8 @@ List semibartcpp(arma::mat iX, arma::mat itrt, arma::vec iy,
   vec curr_beta(NumA); curr_beta.zeros();
   // double curr_sig;
   
-
   mat Aty; //for storing trt.t()*y (or eps)
+  int aux = 0;
   
   //MCMC loop
   for(int k=0;k<ndpost;k++) { // loop through MCMC ndpost times
@@ -263,9 +267,14 @@ List semibartcpp(arma::mat iX, arma::mat itrt, arma::vec iy,
       mtotalfit = mtotalfit - trans(mtrainFits.row(i)); //subtract old fits
       mtotalfit = mtotalfit + mfits; //add new fits
       mtrainFits.row(i) = trans(mfits);
+      savetest.row(aux) = mtrainFits.row(i);
+      aux++;
+    
     }  //end loop through trees
 
-    
+      trdraw.row(k) = trans(mtotalfit); // save the BART fit
+      // countVarUsage(theTrees,varcnt); // count the number of times a covariate is used in a tree
+      // savevarcnt.row(k) = varcnt;
     //update Beta
     //subtract mtotalfit from y;
     eps = y;
@@ -362,7 +371,12 @@ List semibartcpp(arma::mat iX, arma::mat itrt, arma::vec iy,
     Rprintf("Function call finished.\n");
   }
 
+    
    return List::create(_["sigmaReps"] = sigmaReps,
-		      _["betaReps"] = betaReps);
+		               _["betaReps"] = betaReps,
+                       _["test"] = savetest,
+                       _["trdraw"] = trdraw //,
+                       // _["VarCount"] = savevarcnt
+                       );
   
 }

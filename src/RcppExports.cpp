@@ -8,7 +8,7 @@ using namespace Rcpp;
 
 // semibartcpp
 List semibartcpp(arma::mat iX, arma::mat itrt, arma::vec iy, double sigma, int sigdf, double sigquant, double kfac, double power, double base, arma::vec meanb, double sigb, int ntree, int ndpost, arma::ivec inumcut, int iusequants, double binary_offset, int probitlink, int verbose, int printevery);
-RcppExport SEXP semibart_semibartcpp(SEXP iXSEXP, SEXP itrtSEXP, SEXP iySEXP, SEXP sigmaSEXP, SEXP sigdfSEXP, SEXP sigquantSEXP, SEXP kfacSEXP, SEXP powerSEXP, SEXP baseSEXP, SEXP meanbSEXP, SEXP sigbSEXP, SEXP ntreeSEXP, SEXP ndpostSEXP, SEXP inumcutSEXP, SEXP iusequantsSEXP, SEXP binary_offsetSEXP, SEXP probitlinkSEXP, SEXP verboseSEXP, SEXP printeverySEXP) {
+RcppExport SEXP _semibart_semibartcpp(SEXP iXSEXP, SEXP itrtSEXP, SEXP iySEXP, SEXP sigmaSEXP, SEXP sigdfSEXP, SEXP sigquantSEXP, SEXP kfacSEXP, SEXP powerSEXP, SEXP baseSEXP, SEXP meanbSEXP, SEXP sigbSEXP, SEXP ntreeSEXP, SEXP ndpostSEXP, SEXP inumcutSEXP, SEXP iusequantsSEXP, SEXP binary_offsetSEXP, SEXP probitlinkSEXP, SEXP verboseSEXP, SEXP printeverySEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -34,4 +34,14 @@ BEGIN_RCPP
     rcpp_result_gen = Rcpp::wrap(semibartcpp(iX, itrt, iy, sigma, sigdf, sigquant, kfac, power, base, meanb, sigb, ntree, ndpost, inumcut, iusequants, binary_offset, probitlink, verbose, printevery));
     return rcpp_result_gen;
 END_RCPP
+}
+
+static const R_CallMethodDef CallEntries[] = {
+    {"_semibart_semibartcpp", (DL_FUNC) &_semibart_semibartcpp, 19},
+    {NULL, NULL, 0}
+};
+
+RcppExport void R_init_semibart(DllInfo *dll) {
+    R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
+    R_useDynamicSymbols(dll, FALSE);
 }

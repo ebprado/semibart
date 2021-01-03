@@ -569,10 +569,14 @@ Node *Brother(Node *n)
 }
 
 
-
-
-
-
-
-
-
+void getVarUsage(Node* node, int depth, int nodeIndex, std::vector<VarUsage>& vu)
+{
+   if(!node->Bot) {
+      VarUsage temp_vu; temp_vu.depth = depth; temp_vu.nodeIndex = nodeIndex; temp_vu.varIndex = node->rule.Var;
+      vu.push_back(temp_vu);
+      if(!node->Nog) {
+         getVarUsage(node->LeftC,depth+1,2*nodeIndex+1,vu);
+         getVarUsage(node->RightC,depth+1,2*nodeIndex+2,vu);
+      }
+   }
+}

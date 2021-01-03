@@ -310,3 +310,14 @@ double Metrop(Node **top,int *Done,int *step)
 	return alpha;
 }
 
+
+void countVarUsage(std::vector<Node*>& trees, std::vector<int>& cnt)
+{
+  std::vector<VarUsage> vu;
+  cnt.clear(); cnt.resize(NumX+1);
+  for(std::vector<Node*>::size_type i=1;i<trees.size();i++) {
+    vu.clear();
+    getVarUsage(trees[i],0,0,vu);
+    for(std::vector<VarUsage>::size_type j=0;j<vu.size();j++) cnt[vu[j].varIndex]++; 
+  }   
+}

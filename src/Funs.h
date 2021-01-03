@@ -34,7 +34,7 @@ void UpDateCatVarAvail(Node *n, int VarI, int *cats);
 void UpDateVarAvail(Node *n,int VarI);
 
 double Metrop(Node **top,int *Done,int *step);
-
+void countVarUsage(std::vector<Node*>& trees, std::vector<int>& cnt);
 //void countVarUsage(std::vector<Node*>& trees, std::vector<int>& cnt);
 
 
