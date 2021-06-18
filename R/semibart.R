@@ -172,10 +172,15 @@ semibart = function(
     bartres_$test = bartres_$test
   }
   
+  if (binary){
+      bartres_$betaReps = bartres_$betaReps*(rgy[2]-rgy[1])
+      bartres_$trdraw = bartres_$trdraw
+  }
   
   if(binary) {
     retval = list(
-      beta = bartres_$betaReps
+      beta = bartres_$betaReps,
+      bartfit = (rgy[2]-rgy[1])*(bartres_$trdraw+.5) + rgy[1]
       )
   } else {
     retval = list(
